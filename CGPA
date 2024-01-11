@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #calculator {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <h2>CGPA Calculator</h2>
+        <label for="numSubjects">Number of Subjects:</label>
+        <input type="number" id="numSubjects" placeholder="Enter the number of subjects" required>
+
+        <div id="subjectInputs"></div>
+
+        <button onclick="calculateCGPA()">Calculate CGPA</button>
+
+        <h3>Your CGPA is: <span id="result">-</span></h3>
+    </div>
+
+    <script>
+        function generateSubjectInputs() {
+            const numSubjects = document.getElementById("numSubjects").value;
+            const subjectInputs = document.getElementById("subjectInputs");
+
+            subjectInputs.innerHTML = ""; // Clear previous inputs
+
+            for (let i = 1; i <= numSubjects; i++) {
+                const creditInput = document.createElement("input");
+                creditInput.type = "number";
+                creditInput.placeholder = `Enter credit for Subject ${i}`;
+                creditInput.classList.add("subject-credit");
+                subjectInputs.appendChild(creditInput);
+
+                const gradeInput = document.createElement("input");
+                gradeInput.type = "number";
+                gradeInput.step = "0.1";
+                gradeInput.placeholder = `Enter grade for Subject ${i} (0-4)`;
+                gradeInput.classList.add("subject-grade");
+                subjectInputs.appendChild(gradeInput);
+            }
+        }
+
+        function calculateCGPA() {
+            const numSubjects = document.getElementById("numSubjects").value;
+            const subjectCredits = document.querySelectorAll(".subject-credit");
+            const subjectGrades = document.querySelectorAll(".subject-grade");
+
+            let totalCreditPoints = 0;
+            let totalCredits = 0;
+
+            for (let i = 0; i < numSubjects; i++) {
+                const credit = parseFloat(subjectCredits[i].value) || 0;
+                const grade = parseFloat(subjectGrades[i].value) || 0;
+
+                totalCreditPoints += credit * grade;
+                totalCredits += credit;
+            }
+
+            const cgpa = totalCreditPoints / totalCredits;
+            document.getElementById("result").innerText = cgpa.toFixed(2);
+        }
+
+        // Event listener to generate subject inputs dynamically
+        document.getElementById("numSubjects").addEventListener("input", generateSubjectInputs);
+    </script>
+</body>
+</html>
